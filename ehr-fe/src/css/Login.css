@@ -1,0 +1,67 @@
+.login-header{
+  text-align: center;
+  color: green;
+}
+.login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  label {
+    margin-bottom: 10px;
+  }
+  
+  input[type='text'],
+  input[type='password'] {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    background-color: #2e6da4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  button:hover {
+    background-color: #1d4c78;
+  }
+  
+.navigateToRegister{
+  /* padding: 10px 15px; */
+  margin: 20px 15px;
+  background-color: none;
+  border: 1px;
+}
+.navigateToRegister a{
+  background-color: white;
+  border: none;
+}
+.navigateToRegister a:hover {
+  background-color: white;
+  border-bottom: 1px solid blue dashed;
+  border-bottom-style: dotted;
+  border-radius: 5px;
+  
+}
+

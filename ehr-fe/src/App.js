@@ -5,6 +5,7 @@ import PatientLoginPage from './components/PatientLoginPage';
 import DoctorLoginPage from './components/DoctorLoginPage';
 import PatientRegisterPage from './components/PatientRegisterPage';
 import DoctorRegisterPage from './components/DoctorRegisterPage';
+import PatientProfilePage from './components/PatientProfilePage';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route path="/doctor/login" element={<DoctorLoginPage/>} />
             <Route path="/patient/register" element={<PatientRegisterPage/>} />
             <Route path="/doctor/register" element={<DoctorRegisterPage/>} />
+            <Route path="/patient/profile" element={<PatientProfilePage/>} />
           </Routes>
       </div>
     </Router>

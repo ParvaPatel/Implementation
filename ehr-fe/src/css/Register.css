@@ -1,0 +1,68 @@
+h1{
+    text-align: center;
+    color: red;
+}
+
+.register-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* background-color: gray; */
+  }
+  
+  h1 {
+    font-size: 2rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    max-width: 600px;
+    padding: 10px 15px;
+    /* background-color: #0fa4dfd7; */
+  }
+  
+  label {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+  
+  input,
+  select {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 0.3rem;
+    box-shadow: 0 0 0 2px #ccc;
+    transition: box-shadow 0.2s;
+  }
+  
+  input:focus,
+  select:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #2196f3;
+  }
+  
+  button[type="submit"] {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    font-size: 1.2rem;
+    background-color: #2196f3;
+    color: white;
+    border: none;
+    border-radius: 0.3rem;
+    box-shadow: 0 0 0 2px #ccc;
+    transition: all 0.3s ease-in-out;
+}
+
+button:hover {
+  background-color: #1d4c78;
+}
+  
