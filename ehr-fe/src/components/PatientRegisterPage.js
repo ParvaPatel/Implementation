@@ -30,21 +30,14 @@ const PatientRegisterPage = () => {
     const handleSubmit = async (event) => {
       event.preventDefault();
       
-      // const { privateKey, publicKey } = generateKeyPair();
-
       const [encryptedPrivateKey,encryptedPassword] = await generateEncryptedPrivateKey_Password(emailAddress,password,privateAddress);
-      console.log(encryptedPrivateKey);
+      // console.log(encryptedPrivateKey);
       let publicKeyString = publicAddress.toString('base64');
-      // let privateKeyString = privateAddress.toString('base64');
+
+      // console.log(publicKeyString);
 
       const encryptedPrivateKeyString = Buffer.from(encryptedPrivateKey).toString('base64');
       const encryptedPasswordString = Buffer.from(encryptedPassword).toString('base64');
-
-
-      // console.log(encryptedPrivateKeyString,encryptedPasswordString);
-      // console.log(publicKeyString,privateKeyString);
-
-
       const data = {
         patientName: patientName, 
         privateAddress: encryptedPrivateKeyString, 
@@ -69,13 +62,23 @@ const PatientRegisterPage = () => {
             'data': data
         })
       });
-      const data0 = await response.json();
+      const response_ = await response.json();
       
       if (response.ok) {
-        alert(data0);
-        // saveCredentials(data0.emailAddress,data0.publicAddress, data0.privateAddress);
-        // window.location.replace("profile");
+        
+        if(response_ === "Account already exists"){
+          alert("Already Registered");
+          console.log("Already Registered");
+        }else{
+          alert("Registered Successfully");
+          console.log("Registered Successfully");
+          saveCredentials(data.emailAddress,data.publicAddress, privateAddress,password);
+          window.location.replace("profile");
+        }
         return true;
+      }else{
+        alert("Error in Registration");
+        console.log("Error in Registration");
       }
 
 

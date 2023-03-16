@@ -2,11 +2,9 @@
 import React, { useState } from 'react';
 import '../css/Login.css';
 import {Link} from 'react-router-dom';
-import generateEncrypted from '../utils/generateEncrypted';
 import generateDecrypted from '../utils/generateDecrypted';
-import getAESKey from '../utils/getAESKey';
+import saveCredentials from '../utils/saveCredentials';
 import { Buffer } from 'buffer';
-// import React from 'react';
 
 const PatientLoginPage = () => {
   var backendURL = 'http://localhost:5000'
@@ -17,47 +15,63 @@ const PatientLoginPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // const AESKey = await getAESKey(username, password);
-    // const iv = Buffer.from((username + 'username12345678901234567890').slice(0, 16));
-
-    console.log(username, password);
-    
-    const encryptedPassword = await generateEncrypted(username, password, password);
-
     let response = await fetch(backendURL + "/p/" + username, {
       method: "GET",
       cache: "no-cache"
     })
+    console.log(password);
 
     if (response.ok) {
       let keyPair = await response.json()
+
       console.log(keyPair);
 
-    //   let decryptedPrivateKey = await crypto.subtle.decrypt(
-    //     {
-    //         name: "AES-CBC",
-    //         iv: iv,
-    //     },
-    //     AESKey,
-    //     Buffer.from(keyPair['private_key'], 'base64')
-    // )
-    // console.log(decryptedPrivateKey);
       let encryptedPrivateKeyBuffer = Buffer.from(keyPair['private_key'],'base64');
       let encryptedPasswordBuffer = Buffer.from(keyPair['password'],'base64');
       
-      let decryptedPassword = await generateDecrypted(username, password, encryptedPasswordBuffer);
-      let decryptedPrivateKey = await generateDecrypted(username, password, encryptedPrivateKeyBuffer);
-      console.log(Buffer.from(decryptedPrivateKey).toString());
-      console.log(Buffer.from(decryptedPassword).toString());
+      // let decryptedPassword = "dfd";
+      // let decryptedPrivateKey = "cvrver";
+      try{
+        let decryptedPasswordBuffer = await generateDecrypted(username, password, encryptedPasswordBuffer);
+        let decryptedPrivateKeyBuffer = await generateDecrypted(username, password, encryptedPrivateKeyBuffer);
+
+        let decryptedPassword = Buffer.from(decryptedPasswordBuffer).toString();
+        let decryptedPrivateKey = Buffer.from(decryptedPrivateKeyBuffer).toString();
+
+        if (decryptedPassword === password) {
+          saveCredentials(username,keyPair['public_key'], decryptedPrivateKey, decryptedPassword);
+          window.location.replace("profile");
+          alert('Login successful --> Redirecting to profile page');
+          console.log('Login successful');
+        }
+        else {
+            alert('Wrong User credentials');
+            console.log('Wrong User credentials');
+          }
+      } catch(error){
+        alert('Wrong User credentials!');
+        console.log('Wrong User credentials');
+      }
+      // let decryptedPasswordBuffer = await generateDecrypted(username, password, encryptedPasswordBuffer);
+      // let decryptedPrivateKeyBuffer = await generateDecrypted(username, password, encryptedPrivateKeyBuffer);
+
+      // let decryptedPassword = Buffer.from(decryptedPasswordBuffer).toString();
+      // let decryptedPrivateKey = Buffer.from(decryptedPrivateKeyBuffer).toString();
+
+      // if (decryptedPassword === password) {
+      //   saveCredentials(username,keyPair['public_key'], decryptedPrivateKey, decryptedPassword);
+      //   // window.location.replace("profile");
+      //   alert('Login successful --> Redirecting to profile page');
+      //   console.log('Login successful');
+      // } else {
+      //   alert('Wrong User credentials');
+      //   console.log('Wrong User credentials');
+      // }
     } else {
+        alert('No user found');
         console.log('No user found');
     }
 
-
-    // console.log(encryptedPassword);
-
-
-    // Your login authentication logic here
   };
 
   return (

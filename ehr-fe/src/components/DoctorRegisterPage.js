@@ -23,7 +23,7 @@ const DoctorRegisterPage = () => {
       <h1>Doctor Registration</h1>
       {/* Add registration form here */}
       <div className="register-page">
-        <h1>Register as a Doctor</h1>
+        {/* <h1>Register as a Doctor</h1> */}
         <form onSubmit={handleSubmit}>
         <label>
             Doctor License Id:

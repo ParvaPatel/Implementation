@@ -19,10 +19,9 @@ app.post('/p/', async (req, res) => {
     // const userId = req.params.userId;
     const data = req.body.data;
     const privateKey = Buffer.from(data['privateAddress'], 'base64');
-    const publicKey = Buffer.from(data['publicAddress'], 'base64');
+    const publicKey = Buffer.from(data['publicAddress'].substring(2), 'base64');
     const password = Buffer.from(data['password'], 'base64');
     const email = data['emailAddress'];
-
 
     const userDetails = await patientRegistryContract.methods.getPatientInfo(email).call();
 
@@ -50,6 +49,7 @@ app.post('/p/', async (req, res) => {
 app.get('/p/:email', async (req, res) => {
     const email = req.params.email;
     const userDetails = await patientRegistryContract.methods.getPatientInfo(email).call();
+
     if (userDetails[0] == "") {
         res.sendStatus(404);
     }
@@ -57,7 +57,7 @@ app.get('/p/:email', async (req, res) => {
         let response = {
             username: userDetails[0],
             private_key: Buffer.from(userDetails[1].substring(2), 'hex').toString('base64'),
-            public_key: Buffer.from(userDetails[2].substring(2), 'hex').toString('base64'),
+            public_key: "0x" + Buffer.from(userDetails[2].substring(2), 'hex').toString('base64'),
             password: Buffer.from(userDetails[3].substring(2), 'hex').toString('base64')
         }
         res.json(response);

@@ -1,8 +1,9 @@
 import React from 'react';
 
-const saveCredentials = (emailAddress, publicAddress, privateAddress) => {
-    localStorage.setItem('emailAddress', emailAddress);
-    sessionStorage.setItem('publicAddress', privateAddress);
-    sessionStorage.setItem('privateAddress', privateAddress);
+const saveCredentials = (username, publicAddress, privateAddress, password) => {
+    localStorage.setItem('username', username);
+    localStorage.setItem('publicAddress', publicAddress);
+    localStorage.setItem('privateAddress', privateAddress);
+    localStorage.setItem('password', password);
 }
 export default saveCredentials;
