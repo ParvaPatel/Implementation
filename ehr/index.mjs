@@ -4,7 +4,8 @@ import cors from 'cors';
 import Web3 from 'web3';
 
 import {patientRegistryContract} from './connectSmartContracts/patientDataSC.mjs'
-
+import {doctorRegistryContract} from './connectSmartContracts/doctorDataSC.mjs'
+import {medicalRecordsManagementContract} from './connectSmartContracts/medicalRecordsManagementSC.mjs'
 
 const app = express();
 app.use(bodyParser.json());
@@ -63,6 +64,57 @@ app.get('/p/:email', async (req, res) => {
         res.json(response);
     }
 });
+
+
+app.post('/d/', async (req, res) => {
+
+    const data = req.body.data;
+    const privateKey = Buffer.from(data['privateAddress'], 'base64');
+    const publicKey = Buffer.from(data['publicAddress'].substring(2), 'base64');
+    const password = Buffer.from(data['password'], 'base64');
+    const email = data['emailAddress'];
+
+    const userDetails = await doctorRegistryContract.methods.getDoctorInfo(email).call();
+
+    // new account registration
+    if (userDetails[0] == "") {
+
+        const options = {
+            from: data['publicAddress'], 
+            gas: 3000000,
+            gasPrice: '20000000000' 
+          };
+        const result = await doctorRegistryContract.methods.addDoctorInfo(
+            email,
+            privateKey,
+            publicKey,
+            password,
+        ).send(options);
+        res.json(result);
+    }
+    // account already exists
+    else {
+        res.json("Account already exists");
+    }
+});
+app.get('/d/:email', async (req, res) => {
+    const email = req.params.email;
+    const userDetails = await doctorRegistryContract.methods.getDoctorInfo(email).call();
+    if (userDetails[0] == "") {
+        res.sendStatus(404);
+    }
+    else {
+        let response = {
+            username: userDetails[0],
+            private_key: Buffer.from(userDetails[1].substring(2), 'hex').toString('base64'),
+            public_key: "0x" + Buffer.from(userDetails[2].substring(2), 'hex').toString('base64'),
+            password: Buffer.from(userDetails[3].substring(2), 'hex').toString('base64')
+        }
+        res.json(response);
+    }
+});
+
+
 
 app.listen(port, () => {
     console.log('Server listening on port 5000');
