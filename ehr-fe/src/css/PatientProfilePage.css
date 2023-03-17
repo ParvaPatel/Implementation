@@ -1,0 +1,62 @@
+*{
+    margin:0;
+    padding:0;
+}
+
+.profileNavbar1{
+    background-color:  green;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px 30px;
+}
+.profileNavbar1 .leftNavbar{
+    display: inline-block;
+    /* float: left; */
+}
+.profileNavbar1 .rightNavbar{
+    /* display: inline-block; */
+    float: right;
+}
+.profileNavbar1 ul{
+    display: block;
+}
+.profileNavbar1 ul li{
+    display: inline-block;
+}
+.profileNavbar1 ul li select{
+    background-color: inherit;
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding:0;
+    margin:0;
+    border-radius: 0;
+    box-shadow: none;
+    transition: box-shadow 0s;
+}
+.profileNavbar1 ul li select:hover{
+    /* background-color: inherit; */
+    color: black;
+    box-shadow: 0 0 0.2 white;
+    font-weight: bold;
+}
+.profileNavbar1 ul li select option{
+    background-color: transparent;
+    color: black;
+    border: none;
+    padding:10px 10px;
+    margin:0;
+    
+}
+
+
+
+.navbar1 .container{
+    background-color: black;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    color:white;
+    max-width: 10000px;
+  }

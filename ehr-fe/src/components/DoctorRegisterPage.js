@@ -1,7 +1,15 @@
 // DoctorRegisterPage.js
 import React, { useState } from 'react';
 import "../css/Register.css";
+import {Buffer} from 'buffer';
+import saveCredentials from  '../utils/saveCredentials';
+import generateEncryptedPrivateKey_Password from '../utils/generateEncryptedPrivateKey_Password';
+
 const DoctorRegisterPage = () => {
+
+    var backendURL = 'http://localhost:5000'
+
+
     const [doctorName, setDoctorName] = useState("");
     const [doctorId, setDoctorId] = useState("");
     const [specilization, setSpecilization] = useState("");
@@ -10,13 +18,63 @@ const DoctorRegisterPage = () => {
     const [gender, setGender] = useState("");
     const [age, setAge] = useState("");
     const [password, setPassword] = useState('');
-    const [PrivateAddress, setPrivateAddress] = useState('');
-    const [PublicAddress, setPublicAddress] = useState('');
+    const [privateAddress, setPrivateAddress] = useState('');
+    const [publicAddress, setPublicAddress] = useState('');
   
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
       event.preventDefault();
-      // console.log(patientName);
-      // TODO: handle form submission
+
+      const [encryptedPrivateKey,encryptedPassword] = await generateEncryptedPrivateKey_Password(emailAddress,password,privateAddress);
+      let publicKeyString = publicAddress.toString('base64');
+
+      const encryptedPrivateKeyString = Buffer.from(encryptedPrivateKey).toString('base64');
+      const encryptedPasswordString = Buffer.from(encryptedPassword).toString('base64');
+
+
+      const data = {
+        doctorName: doctorName,
+        privateAddress: encryptedPrivateKeyString,
+        publicAddress: publicKeyString,
+        password: encryptedPasswordString,
+        contactNumber: contactNumber,
+        emailAddress: emailAddress,
+        age: age,
+        gender: gender,
+        doctorId: doctorId
+      }
+
+      let response = await fetch(backendURL + "/d/", {
+        method: 'POST',
+        cache: 'no-cache',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+        body: JSON.stringify({
+          'data': data
+        })
+      });
+
+      const responseData = await response.json();
+      if (response.ok) {
+        if(responseData === "Account already exists"){
+          alert("Already Registered");
+          console.log("Already Registered");
+        }else{
+          alert("Registered Successfully");
+          console.log("Registered Successfully");
+          saveCredentials(data.emailAddress,data.publicAddress, privateAddress,password);
+          localStorage.setItem('type', 'doctor');
+          window.location.replace("profile");
+        }
+        return true;
+      }else{
+        alert("Error in Registration");
+        console.log("Error in Registration");
+      }
+
+
     };
   return (
     <div>
@@ -97,7 +155,7 @@ const DoctorRegisterPage = () => {
           Private Address:
           <input
             type="text"
-            value={PrivateAddress}
+            value={privateAddress}
             onChange={(e) => setPrivateAddress(e.target.value)}
           />
         </label>
@@ -106,7 +164,7 @@ const DoctorRegisterPage = () => {
           Public Address:
           <input
             type="text"
-            value={PublicAddress}
+            value={publicAddress}
             onChange={(e) => setPublicAddress(e.target.value)}
           />
         </label>

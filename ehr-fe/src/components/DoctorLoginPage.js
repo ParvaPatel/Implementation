@@ -1,14 +1,59 @@
 import React, { useState } from 'react';
 import '../css/Login.css';
 import {Link} from 'react-router-dom';
+import generateDecrypted from '../utils/generateDecrypted';
+import saveCredentials from '../utils/saveCredentials';
+import { Buffer } from 'buffer';
 
 const DoctorLoginPage = () => {
-  const [doctorId, setDoctorId] = useState('');
+  var backendURL = 'http://localhost:5000'
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Your login authentication logic here
+
+    let response = await fetch(backendURL + "/d/" +username, {
+      
+      method: "GET",
+      cache: "no-cache"
+    })
+    if (response.ok) {
+      let keyPair = await response.json()
+
+      console.log(keyPair);
+
+      let encryptedPrivateKeyBuffer = Buffer.from(keyPair['private_key'],'base64');
+      let encryptedPasswordBuffer = Buffer.from(keyPair['password'],'base64');
+
+      try{
+        let decryptedPasswordBuffer = await generateDecrypted(username, password, encryptedPasswordBuffer);
+        let decryptedPrivateKeyBuffer = await generateDecrypted(username, password, encryptedPrivateKeyBuffer);
+
+        let decryptedPassword = Buffer.from(decryptedPasswordBuffer).toString();
+        let decryptedPrivateKey = Buffer.from(decryptedPrivateKeyBuffer).toString();
+
+        if (decryptedPassword === password) {
+          saveCredentials(username,keyPair['public_key'], decryptedPrivateKey, decryptedPassword);
+          localStorage.setItem('type', 'doctor');
+
+          window.location.replace("profile");
+          alert('Login successful --> Redirecting to profile page');
+          console.log('Login successful');
+        }
+        else {
+            alert('Wrong User credentials');
+            console.log('Wrong User credentials');
+          }
+      } catch(error){
+        alert('Wrong User credentials!');
+        console.log('Wrong User credentials');
+      }
+
+    } else {
+        alert('No user found');
+        console.log('No user found');
+    }
   };
 
   return (
@@ -20,11 +65,11 @@ const DoctorLoginPage = () => {
       
       <form className="login-form" onSubmit={handleSubmit}>
         <label>
-          Doctor Id:
+          Username (EmailId):
           <input
             type="text"
-            value={doctorId}
-            onChange={(e) => setDoctorId(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
         </label>
         <label>

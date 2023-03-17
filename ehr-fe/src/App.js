@@ -6,6 +6,8 @@ import DoctorLoginPage from './components/DoctorLoginPage';
 import PatientRegisterPage from './components/PatientRegisterPage';
 import DoctorRegisterPage from './components/DoctorRegisterPage';
 import PatientProfilePage from './components/PatientProfilePage';
+import DoctorProfilePage from './components/DoctorProfilePage';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
@@ -18,6 +20,7 @@ function App() {
             <Route path="/patient/register" element={<PatientRegisterPage/>} />
             <Route path="/doctor/register" element={<DoctorRegisterPage/>} />
             <Route path="/patient/profile" element={<PatientProfilePage/>} />
+            <Route path="/doctor/profile" element={<DoctorProfilePage/>} />
           </Routes>
       </div>
     </Router>

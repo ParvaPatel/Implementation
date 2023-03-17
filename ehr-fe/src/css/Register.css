@@ -16,7 +16,7 @@ h1{
     margin-bottom: 2rem;
   }
   
-  form {
+.register-page form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -26,15 +26,15 @@ h1{
     /* background-color: #0fa4dfd7; */
   }
   
-  label {
+  .register-page form label {
     display: flex;
     flex-direction: column;
     margin-bottom: 1rem;
     width: 100%;
   }
   
-  input,
-  select {
+  .register-page form label input,
+  .register-page form label select {
     margin-top: 0.5rem;
     padding: 0.5rem;
     font-size: 1.2rem;
@@ -44,13 +44,13 @@ h1{
     transition: box-shadow 0.2s;
   }
   
-  input:focus,
-  select:focus {
+  .register-page form label input:focus,
+  .register-page form label select:focus {
     outline: none;
     box-shadow: 0 0 0 2px #2196f3;
   }
   
-  button[type="submit"] {
+  .register-page form button[type="submit"] {
     margin-top: 1rem;
     padding: 0.5rem 1rem;
     font-size: 1.2rem;
@@ -62,7 +62,7 @@ h1{
     transition: all 0.3s ease-in-out;
 }
 
-button:hover {
+.register-page form button:hover {
   background-color: #1d4c78;
 }
   

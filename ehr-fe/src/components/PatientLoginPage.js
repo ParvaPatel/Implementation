@@ -14,12 +14,11 @@ const PatientLoginPage = () => {
   // const [PublicAddress, setPublicAddress] = useState('');
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    console.log("hello");
     let response = await fetch(backendURL + "/p/" + username, {
       method: "GET",
       cache: "no-cache"
     })
-    console.log(password);
 
     if (response.ok) {
       let keyPair = await response.json()
@@ -40,6 +39,7 @@ const PatientLoginPage = () => {
 
         if (decryptedPassword === password) {
           saveCredentials(username,keyPair['public_key'], decryptedPrivateKey, decryptedPassword);
+          localStorage.setItem('type', 'patient');
           window.location.replace("profile");
           alert('Login successful --> Redirecting to profile page');
           console.log('Login successful');
@@ -52,21 +52,7 @@ const PatientLoginPage = () => {
         alert('Wrong User credentials!');
         console.log('Wrong User credentials');
       }
-      // let decryptedPasswordBuffer = await generateDecrypted(username, password, encryptedPasswordBuffer);
-      // let decryptedPrivateKeyBuffer = await generateDecrypted(username, password, encryptedPrivateKeyBuffer);
 
-      // let decryptedPassword = Buffer.from(decryptedPasswordBuffer).toString();
-      // let decryptedPrivateKey = Buffer.from(decryptedPrivateKeyBuffer).toString();
-
-      // if (decryptedPassword === password) {
-      //   saveCredentials(username,keyPair['public_key'], decryptedPrivateKey, decryptedPassword);
-      //   // window.location.replace("profile");
-      //   alert('Login successful --> Redirecting to profile page');
-      //   console.log('Login successful');
-      // } else {
-      //   alert('Wrong User credentials');
-      //   console.log('Wrong User credentials');
-      // }
     } else {
         alert('No user found');
         console.log('No user found');
@@ -75,15 +61,13 @@ const PatientLoginPage = () => {
   };
 
   return (
-    <div>
+    <div className="Logindiv">
       <h1 className='login-header'>Patient Login</h1>
-      {/* Add login form here */}
       <div className="login-page">
-      {/* <h2> Patient Login </h2> */}
       
       <form className="login-form" onSubmit={handleSubmit}>
         <label>
-          Username:
+          Username (EmailId):
           <input
             type="text"
             value={username}

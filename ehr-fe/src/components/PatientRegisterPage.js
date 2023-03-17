@@ -12,8 +12,7 @@ import generateEncryptedPrivateKey_Password from '../utils/generateEncryptedPriv
 
 
 const PatientRegisterPage = () => {
-    // checking the local storage is working or not
-    saveCredentials("abc@gmail.com","64-bit", "32-bit");
+
     var backendURL = 'http://localhost:5000'
     const [patientName, setPatientName] = useState("");
     const [contactNumber, setContactNumber] = useState("");
@@ -73,6 +72,7 @@ const PatientRegisterPage = () => {
           alert("Registered Successfully");
           console.log("Registered Successfully");
           saveCredentials(data.emailAddress,data.publicAddress, privateAddress,password);
+          localStorage.setItem('type', 'patient');
           window.location.replace("profile");
         }
         return true;
@@ -119,9 +119,7 @@ const PatientRegisterPage = () => {
   return (
     <div>
       <h1>Patient Registration</h1>
-      {/* Add registration form here */}
         <div className="register-page">
-        {/* <h1>Register as a Patient</h1> */}
         <form onSubmit={handleSubmit}>
           <label>
             Patient Name:
