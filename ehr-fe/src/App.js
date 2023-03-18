@@ -1,4 +1,6 @@
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './index.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './HomePage';
 import PatientLoginPage from './components/PatientLoginPage';
@@ -7,7 +9,9 @@ import PatientRegisterPage from './components/PatientRegisterPage';
 import DoctorRegisterPage from './components/DoctorRegisterPage';
 import PatientProfilePage from './components/PatientProfilePage';
 import DoctorProfilePage from './components/DoctorProfilePage';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import DoctorAccessList from './components/patientComponents/DoctorAccessList';
+
+//Patient Components
 
 function App() {
   return (
@@ -21,6 +25,8 @@ function App() {
             <Route path="/doctor/register" element={<DoctorRegisterPage/>} />
             <Route path="/patient/profile" element={<PatientProfilePage/>} />
             <Route path="/doctor/profile" element={<DoctorProfilePage/>} />
+            <Route path="/patient/profile/docAccessList" element={<DoctorAccessList/>} />
+
           </Routes>
       </div>
     </Router>

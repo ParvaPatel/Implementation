@@ -3,7 +3,7 @@ import { Container, Navbar, Nav ,Dropdown } from 'react-bootstrap';
 import { Navigate } from 'react-router';
 
 const DoctorProfilePage = () => {
-    // var num=1;
+    var num=1;
     const [type, setType] = useState("");
     const [username, setUsername] = useState("");
     const [publicAddress, setPublicAddress] = useState("");
@@ -31,15 +31,22 @@ const DoctorProfilePage = () => {
         setType(type);
       }
       if(type !== "doctor"){
-        // if(num==1){
-        //   alert('Session Expired');
-        //   num++;
-        // }
+        if(num==1){
+          alert('Session Expired');
+          num++;
+        }
         window.location.href = "/doctor/login";
         return <Navigate to = "/doctor/login" />
       }
     },[]
     );
+    const handleSubmit = async (event) => {
+      event.preventDefault();
+      localStorage.clear();
+      // window.location.replace("login");
+      window.location.href = "/doctor/login";
+      console.log("working");
+    }
     return(
         <div>
         <Navbar bg="dark" expand="lg" className="px-0 mx-0">
@@ -51,14 +58,14 @@ const DoctorProfilePage = () => {
                 All Health Records
               </Nav>
               <Nav className="ms-1 px-3 ">
-                Doctor Access List
+                Patient Access List
               </Nav>
                 <Dropdown className=" px-0 me-0">
                   <Dropdown.Toggle variant="success" id="dropdown-basic">
                   Welcome {username}
                   </Dropdown.Toggle>
                     <Dropdown.Menu>
-                    <Dropdown.Item href="#/action-1">Logout</Dropdown.Item>
+                    <Dropdown.Item onClick={handleSubmit}>Logout</Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
                 

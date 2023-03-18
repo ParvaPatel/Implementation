@@ -12,7 +12,7 @@ const DoctorRegisterPage = () => {
 
     const [doctorName, setDoctorName] = useState("");
     const [doctorId, setDoctorId] = useState("");
-    const [specilization, setSpecilization] = useState("");
+    const [specialization, setSpecialization] = useState("");
     const [contactNumber, setContactNumber] = useState("");
     const [emailAddress, setEmailAddress] = useState("");
     const [gender, setGender] = useState("");
@@ -40,7 +40,8 @@ const DoctorRegisterPage = () => {
         emailAddress: emailAddress,
         age: age,
         gender: gender,
-        doctorId: doctorId
+        doctorId: doctorId,
+        specialization: specialization
       }
 
       let response = await fetch(backendURL + "/d/", {
@@ -102,11 +103,11 @@ const DoctorRegisterPage = () => {
             />
           </label>
           <label>
-            Specilization:
+            Specialization:
             <input
               type="text"
-              value={specilization}
-              onChange={(event) => setSpecilization(event.target.value)}
+              value={specialization}
+              onChange={(event) => setSpecialization(event.target.value)}
               required
             />
           </label>

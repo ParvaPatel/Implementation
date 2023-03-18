@@ -7,13 +7,13 @@
     background-color: #f2f2f2;
   }
   
-  .options {
+.home-page .options {
     display: flex;
     justify-content: center;
     margin-top: 50px;
   }
   
-  .option {
+.home-page  .option {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -28,43 +28,48 @@
     transition: box-shadow 0.3s ease;
   }
   
-  .option:hover {
+.home-page  .options .option:hover {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  }
-  
-  .patient {
+}
+
+.patient {
     border-top: 5px solid #16a085;
-  }
+}
   
-  .doctor {
+.doctor {
     border-top: 5px solid #2980b9;
-  }
+}
   
-  h1 {
+.home-page  h1 {
     font-size: 3rem;
     margin-bottom: 50px;
-  }
+}
   
-  h2 {
+  .home-page  .options .option h2 {
     font-size: 2rem;
     margin-bottom: 20px;
   }
   
-  p {
+  .home-page  .options .option p {
     font-size: 1.2rem;
     color: #777;
   }
-  a  {
+  .home-page  .options  a  {
     text-decoration: none;
     color: darkblue;
     font-size: 1.2rem;
     padding: 10px 20px;
     border-radius: 5px;
-    background-color: #16a085;
+    /* background-color: #16a085; */
     transition: background-color 0.3s ease;
   }
   
-  a:hover {
+  .home-page  .options a:hover {
     background-color: #1abc9c;
+    
+  }
+  .home-page  .options a:hover p{
+    color: white;
+    font-weight: 500;
   }
     
