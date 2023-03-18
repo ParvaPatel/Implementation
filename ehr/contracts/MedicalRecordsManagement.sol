@@ -93,8 +93,14 @@ contract MedicalRecordsManagement {
         emit AccessChanged(msg.sender, doctorAdd, false);
     }
 
-    function getAccessedDoctorList(address patientAdd) view public  returns (address[] memory){
-        return patientRecords[patientAdd].doctorAccessList;
+    function getAccessedDoctorList(address patientAdd) view public  returns (toGetDoctorList[] memory){
+        
+        address[] memory temp1 = patientRecords[patientAdd].doctorAccessList;
+        toGetDoctorList[] memory temp = new toGetDoctorList[](temp1.length);
+        for(uint256 i=0;i<temp1.length;i++){
+            temp[i] = toGetDoctorList(doctorRecords[temp1[i]].username,doctorRecords[temp1[i]].name,doctorRecords[temp1[i]].licenseId,doctorRecords[temp1[i]].specialization,temp1[i]);
+        }
+        return temp;
     }
     function getAccessedPatientList(address doctorAdd) view public returns (address[] memory){
         return doctorRecords[doctorAdd].patientAccessList;
@@ -119,5 +125,8 @@ contract MedicalRecordsManagement {
     function addPatientDataForDoctor(address patientAdd, string memory data) public{
         require(checkAccess(patientAdd,msg.sender),"You do not have access");
         patientRecords[patientAdd].ipfsHashes.push(data);
+    }
+    function getPatientDataForPatient() public view returns (string[] memory){
+        return (patientRecords[msg.sender].ipfsHashes);
     }
 }

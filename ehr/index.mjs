@@ -222,6 +222,16 @@ app.post('/addPatientDataForDoctor/', async (req, res) => {
         res.json("You do not have access to this patient data");
     }
 });
+app.get('/getPatientDataForPatient/:patientAddress', async (req, res) => {
+    const patientAddress = req.params.patientAddress;
+    const options = {
+        from: patientAddress,
+        gas: 3000000,
+        gasPrice: '20000000000'
+    };
+    const result = await medicalRecordsManagementContract.methods.getPatientDataForPatient().call(options);
+    res.json(result);
+});
 
 app.listen(port, () => {
     console.log('Server listening on port 5000');
