@@ -73,3 +73,10 @@
   
 }
 
+.backButton{
+  position: absolute;
+  width: 50px;
+  height: auto;
+  left: 20px;
+  top: 20px;
+}

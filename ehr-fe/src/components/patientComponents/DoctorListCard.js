@@ -1,10 +1,8 @@
-
 import React from 'react';
-
-const DoctorAccessListCard = (props) => {
+import {Button} from 'react-bootstrap';
+const DoctorListCard = (props) => {
     const doctor = props.doctor;
-    const num = props.num
-   
+    const num = props.num;
     return (
         <>
                 <th scope="row">{num}</th>
@@ -15,4 +13,4 @@ const DoctorAccessListCard = (props) => {
         </>
     );
 }
-export default DoctorAccessListCard;
+export default DoctorListCard;

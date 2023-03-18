@@ -10,7 +10,9 @@ import DoctorRegisterPage from './components/DoctorRegisterPage';
 import PatientProfilePage from './components/PatientProfilePage';
 import DoctorProfilePage from './components/DoctorProfilePage';
 import DoctorAccessList from './components/patientComponents/DoctorAccessList';
-
+import DoctorList from './components/patientComponents/DoctorList';
+import PatientAccessList from './components/doctorComponents/PatientAccessList';
+import AddPatientData from './components/doctorComponents/AddPatientData';
 //Patient Components
 
 function App() {
@@ -26,6 +28,10 @@ function App() {
             <Route path="/patient/profile" element={<PatientProfilePage/>} />
             <Route path="/doctor/profile" element={<DoctorProfilePage/>} />
             <Route path="/patient/profile/docAccessList" element={<DoctorAccessList/>} />
+            <Route path="/patient/profile/docList" element={<DoctorList/>} />
+            <Route path="/doctor/profile/patientAccessList" element={<PatientAccessList/>} />
+            <Route path="/doctor/profile/patientAccessList/AddViewData" element={<AddPatientData/>} />
+
 
           </Routes>
       </div>
