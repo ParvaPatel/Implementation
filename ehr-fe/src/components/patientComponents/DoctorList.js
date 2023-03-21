@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import useFetch from '../../utils/useFetch';
 import { Container, Navbar, Nav, Dropdown } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
+import NavbarPatient from '../NavbarPatient'
 
 const DoctorList = () => {
     // const doctors;
@@ -12,6 +13,7 @@ const DoctorList = () => {
     const { data: doctorList, isPending, error } = useFetch(url);
     var num = 1;
     const [doctorAccessList,setDoctorAccessList] = useState([]);
+    const username = localStorage.getItem('username');
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -62,7 +64,8 @@ const DoctorList = () => {
     return (
 
         <>
-            
+                        <NavbarPatient username={username}/>
+
             <h1>Doctor List</h1>
             <table className="table">
                 <thead>

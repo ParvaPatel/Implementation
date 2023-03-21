@@ -3,6 +3,8 @@ import { Container, Navbar, Nav, Dropdown } from 'react-bootstrap';
 import { Navigate } from 'react-router';
 import { useNavigate } from "react-router-dom";
 import { useHistory } from 'react-router-dom';
+import NavbarDoctor from './NavbarDoctor';
+
 
 const DoctorProfilePage = () => {
   var num = 1;
@@ -49,29 +51,8 @@ const DoctorProfilePage = () => {
 
   return (
     <div>
-      <Navbar bg="dark" expand="lg" className="px-0 mx-0">
-        <Container className="px-0 mx-2 text-white ">
-          <Navbar.Brand href="#home" className="text-white bg-dark">EHR</Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            {/* <Nav className="ms-1 px-3 ">
-                All Health Records
-              </Nav> */}
-            <Nav className="ms-1 px-3 " onClick={() => navigate("./patientAccessList")}>
-              Patient Access List
-            </Nav>
-            <Dropdown className=" px-0 me-0">
-              <Dropdown.Toggle variant="success" id="dropdown-basic">
-                Welcome {username}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item onClick={handleSubmit}>Logout</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+      <NavbarDoctor username={username} />
 
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
       {/* <button onClick={handleBackClick}>Back</button> */}
       <h2>
         {console.log(username)}

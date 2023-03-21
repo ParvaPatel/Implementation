@@ -13,9 +13,15 @@ import DoctorAccessList from './components/patientComponents/DoctorAccessList';
 import DoctorList from './components/patientComponents/DoctorList';
 import PatientAccessList from './components/doctorComponents/PatientAccessList';
 import AddPatientData from './components/doctorComponents/AddPatientData';
+import {create} from 'ipfs-http-client';
+
 //Patient Components
 
 function App() {
+
+  const ipfs = create('http://localhost:5001');
+
+
   return (
     <Router>
       <div>
@@ -25,12 +31,12 @@ function App() {
             <Route path="/doctor/login" element={<DoctorLoginPage/>} />
             <Route path="/patient/register" element={<PatientRegisterPage/>} />
             <Route path="/doctor/register" element={<DoctorRegisterPage/>} />
-            <Route path="/patient/profile" element={<PatientProfilePage/>} />
+            <Route path="/patient/profile" element={<PatientProfilePage ipfs={ipfs}/>} />
             <Route path="/doctor/profile" element={<DoctorProfilePage/>} />
             <Route path="/patient/profile/docAccessList" element={<DoctorAccessList/>} />
             <Route path="/patient/profile/docList" element={<DoctorList/>} />
-            <Route path="/doctor/profile/patientAccessList" element={<PatientAccessList/>} />
-            <Route path="/doctor/profile/patientAccessList/AddViewData" element={<AddPatientData/>} />
+            <Route path="/doctor/profile/patientAccessList" element={<PatientAccessList ipfs={ipfs}/>} />
+            <Route path="/doctor/profile/patientAccessList/AddViewData" element={<AddPatientData ipfs={ipfs}/>} />
 
 
           </Routes>

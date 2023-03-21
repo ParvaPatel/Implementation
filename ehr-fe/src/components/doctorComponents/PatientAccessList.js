@@ -3,6 +3,7 @@ import PatientAccessListCard from './PatientAccessListCard';
 // import { useEffect, useState } from "react";
 import useFetch from '../../utils/useFetch';
 // import { Container, Navbar, Nav, Dropdown } from 'react-bootstrap';
+import NavbarDoctor from '../NavbarDoctor';
 
 const PatientAccessList = () => {
     // const patients;
@@ -12,10 +13,13 @@ const PatientAccessList = () => {
     var url = backendURL + '/getAccessedPatientList/'+doctorAddress;
     const { data: patientAccessList, isPending, error } = useFetch(url);
     console.log(patientAccessList);
+    const username = localStorage.getItem('username') || "";
     var num=1;
     return (
 
         <>
+            <NavbarDoctor username={username} />
+
             <h1>Patient Access List</h1>
             <table className="table">
                 <thead>

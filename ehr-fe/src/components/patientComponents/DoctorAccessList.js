@@ -3,6 +3,7 @@ import DoctorAccessListCard from './DoctorAccessListCard';
 import { useEffect, useState } from "react";
 import useFetch from '../../utils/useFetch';
 import { Container, Navbar, Nav, Dropdown } from 'react-bootstrap';
+import NavbarPatient from '../NavbarPatient'
 
 const DoctorAccessList = () => {
     // const doctors;
@@ -13,6 +14,7 @@ const DoctorAccessList = () => {
     const { data: doctorAccessList, isPending, error } = useFetch(url);
     console.log(doctorAccessList);
     var num=1;
+    var username = localStorage.getItem('username');
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -44,6 +46,8 @@ const DoctorAccessList = () => {
     return (
 
         <>
+                        <NavbarPatient username={username}/>
+
             <h1>Doctor Access List</h1>
             <table className="table">
                 <thead>

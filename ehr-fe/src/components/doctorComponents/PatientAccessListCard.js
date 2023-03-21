@@ -13,7 +13,7 @@ const PatientAccessListCard = (props) => {
                 {/* <td>{patient[2]}</td> */}
                 <td>{patient}</td>
 
-                <td><Link to="AddViewData" state = {{patient,}}> <button type="button" className='btn btn-outline-info'> Add/View Data </button> </Link></td>
+                <td><Link to="AddViewData" state = {{patient}}> <button type="button" className='btn btn-outline-info'> Add/View Data </button> </Link></td>
                 {/* <td><button type="button" className='btn btn-info'>Add/View Data</button></td> */}
             </tr>
         </>

@@ -1,9 +1,7 @@
-import {create} from 'ipfs-http-client';
 import { Buffer } from 'buffer';
 
-const ipfs = create('http://localhost:5001');
 
-const addFileToIpfs = async (file) => {
+const addFileToIpfs = async ({file,ipfs}) => {
 
 
     const buffer = Buffer.from(await file.arrayBuffer());

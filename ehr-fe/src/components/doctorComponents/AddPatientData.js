@@ -3,7 +3,8 @@ import { useLocation } from "react-router-dom";
 import addFileToIpfs from '../../utils/addFileToIpfs';
 import getFileFromIpfs from '../../utils/getFileFromIpfs';
 import IpfsCard from './IpfsCard';
-const AddPatientData = () => {
+import NavbarDoctor from '../NavbarDoctor';
+const AddPatientData = ({ipfs}) => {
 
     const location = useLocation();
     const patientAdd = location.state.patient;
@@ -11,19 +12,41 @@ const AddPatientData = () => {
     const [ipfsList, setIpfsList] = useState([]);
     const [file, setFile] = useState(null);
     const doctorAdd = localStorage.getItem('publicAddress');
+    const username = localStorage.getItem('username');
     var num = 1;
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        const cid = await addFileToIpfs(file);
+        const cid = await addFileToIpfs({file,ipfs});
+        console.log(cid);
+ 
+        fetch(backendURL + "/addPatientDataForDoctor/", {
+            method: 'POST',
+            cache: 'no-cache',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            redirect: 'follow',
+            referrerPolicy: 'no-referrer',
+            body: JSON.stringify({
+                'patientAddress': patientAdd,
+                'doctorAddress': doctorAdd,
+                'patientData': cid
+            })
+        }).then((response) => response.json()).
+            then((data) => {
+                // getIpfsHashes();
+                window.location.reload();
+            });
+
         // // const formData = new FormData();
         // // formData.append("file", file);
         // console.log(cid);
-        const data = await getFileFromIpfs(cid);
-        const url = URL.createObjectURL(data);
-        window.open(url, '_blank');
-        console.log(data);
+        // const data = await getFileFromIpfs(cid);
+        // const url = URL.createObjectURL(data);
+        // window.open(url, '_blank');
+        // console.log(data);
 
     };
     useEffect(() => {
@@ -48,6 +71,7 @@ const AddPatientData = () => {
 
     return (
         <>
+            <NavbarDoctor username={username}/>
             <h1>Patient Name Records</h1>
             <table class="table table-hover px-5">
 
@@ -80,8 +104,8 @@ const AddPatientData = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {ipfsList && ipfsList.map((ipfs, index) => (
-                        <IpfsCard ipfs={ipfs} key={index} num={num++} />
+                    {ipfsList && ipfsList.map((ipfsHash, index) => (
+                        <IpfsCard ipfsHash={ipfsHash} ipfs={ipfs} key={index} num={num++} />
                     ))
                     }
                 </tbody>
