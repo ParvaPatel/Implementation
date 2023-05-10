@@ -5,6 +5,7 @@ import useFetch from '../../utils/useFetch';
 import { Container, Navbar, Nav, Dropdown } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import NavbarPatient from '../NavbarPatient'
+import CodeModal from '../CodeModal';
 
 const DoctorList = () => {
     // const doctors;
@@ -14,38 +15,55 @@ const DoctorList = () => {
     var num = 1;
     const [doctorAccessList,setDoctorAccessList] = useState([]);
     const username = localStorage.getItem('username');
+    const [modalOpen, setModalOpen] = useState(false);
+    const [code, setCode] = useState("");
 
     const handleSubmit = async (event) => {
-        event.preventDefault();
-        var doctorAddress = event.target.value;
-        var patientAddress = localStorage.getItem('publicAddress');
-        console.log(doctorAddress, patientAddress);
-        // const x = JSON.parse(localStorage.getItem('doctorAccessList'));
-        // x.push(doctorAddress);
-        // console.log(JSON.stringify(x));
-        // localStorage.setItem('doctorAccessList', JSON.stringify(x));
         
-        await fetch(backendURL + "/addDoctorAccess/", {
-            method: 'POST',
-            cache: 'no-cache',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            redirect: 'follow',
-            referrerPolicy: 'no-referrer',
-            body: JSON.stringify({
-                "doctorAddress": doctorAddress,
-                "patientAddress": patientAddress
-            })
-          }).then((response) => {
-            console.log(response);
-            var x = JSON.parse(localStorage.getItem('doctorAccessList'));
-            x.push(doctorAddress);
-            localStorage.setItem('doctorAccessList', JSON.stringify(x));
-            window.location.reload();
-          });
+        event.preventDefault();
+        if(code){
+            var doctorAddress = event.target.value;
+            var patientAddress = localStorage.getItem('publicAddress');
+            console.log(doctorAddress, patientAddress);
+            
+            // const x = JSON.parse(localStorage.getItem('doctorAccessList'));
+            // x.push(doctorAddress);
+            // console.log(JSON.stringify(x));
+            // localStorage.setItem('doctorAccessList', JSON.stringify(x));
+            
+            await fetch(backendURL + "/addDoctorAccess/", {
+                method: 'POST',
+                cache: 'no-cache',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                redirect: 'follow',
+                referrerPolicy: 'no-referrer',
+                body: JSON.stringify({
+                    "doctorAddress": doctorAddress,
+                    "patientAddress": patientAddress
+                })
+            }).then((response) => {
+                console.log(response);
+                var x = JSON.parse(localStorage.getItem('doctorAccessList'));
+                x.push(doctorAddress);
+                localStorage.setItem('doctorAccessList', JSON.stringify(x));
+                window.location.reload();
+            });
+        }
+        else{
+            openModal();
+        }
 
     }
+    const openModal = () => {
+        setCode("");
+        setModalOpen(true);        
+    };
+    
+    const closeModal =async () => {
+        setModalOpen(false);
+    };
 
 
 
@@ -64,6 +82,8 @@ const DoctorList = () => {
     return (
 
         <>
+                           <CodeModal code={code} modalOpen={modalOpen} closeModal={closeModal} setCode={setCode}/>
+
                         <NavbarPatient username={username}/>
 
             <h1>Doctor List</h1>

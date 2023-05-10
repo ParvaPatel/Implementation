@@ -182,9 +182,9 @@ const PatientRegisterPage = () => {
             value={privateAddress}
             onChange={(e) => setPrivateAddress(e.target.value)}
           />
-        </label>
+        </label> 
 
-        <label>
+         <label>
           Public Address:
           <input
             type="text"

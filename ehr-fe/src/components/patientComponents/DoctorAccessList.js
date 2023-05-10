@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import useFetch from '../../utils/useFetch';
 import { Container, Navbar, Nav, Dropdown } from 'react-bootstrap';
 import NavbarPatient from '../NavbarPatient'
+import CodeModal from '../CodeModal';
 
 const DoctorAccessList = () => {
     // const doctors;
@@ -15,37 +16,58 @@ const DoctorAccessList = () => {
     console.log(doctorAccessList);
     var num=1;
     var username = localStorage.getItem('username');
+    const [modalOpen, setModalOpen] = useState(false);
+    const [code, setCode] = useState("");
+
+
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        var doctorAddress = event.target.value;
-        console.log(doctorAddress, patientAddress);
-        
-        await fetch(backendURL + "/removeDoctorAccess/", {
-            method: 'POST',
-            cache: 'no-cache',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            redirect: 'follow',
-            referrerPolicy: 'no-referrer',
-            body: JSON.stringify({
-                "doctorAddress": doctorAddress,
-                "patientAddress": patientAddress
-            })
-          }).then((response) => {
-            console.log(response);
-            localStorage.setItem('doctorAccessList', JSON.stringify(JSON.parse(localStorage.getItem('doctorAccessList')).filter((doctor) => doctor !== doctorAddress)));
-            window.location.reload();
-          });
 
+        if(code){
+            var doctorAddress = event.target.value;
+            console.log(doctorAddress, patientAddress);
+            
+            await fetch(backendURL + "/removeDoctorAccess/", {
+                method: 'POST',
+                cache: 'no-cache',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                redirect: 'follow',
+                referrerPolicy: 'no-referrer',
+                body: JSON.stringify({
+                    "doctorAddress": doctorAddress,
+                    "patientAddress": patientAddress
+                })
+            }).then((response) => {
+                console.log(response);
+                localStorage.setItem('doctorAccessList', JSON.stringify(JSON.parse(localStorage.getItem('doctorAccessList')).filter((doctor) => doctor !== doctorAddress)));
+                window.location.reload();
+            });
+        }
+        
+        else{
+            openModal();
+        }
         // Do something with the input value
     }
+
+    const openModal = () => {
+        setCode("");
+        setModalOpen(true);        
+    };
+    
+    const closeModal =async () => {
+        setModalOpen(false);
+    };
+
 
 
     return (
 
         <>
+                   <CodeModal code={code} modalOpen={modalOpen} closeModal={closeModal} setCode={setCode}/>
                         <NavbarPatient username={username}/>
 
             <h1>Doctor Access List</h1>

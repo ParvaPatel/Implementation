@@ -230,8 +230,23 @@ app.get('/getPatientDataForPatient/:patientAddress', async (req, res) => {
         gasPrice: '20000000000'
     };
     const result = await medicalRecordsManagementContract.methods.getPatientDataForPatient().call(options);
-    res.json(result);
+    const pendingResult = await medicalRecordsManagementContract.methods.getPendingIpfs().call(options);
+    res.json({ result, pendingResult });
 });
+
+app.post('/recordApprove/:patientAddress', async (req, res) => {
+    const {patientAddress} = req.params;
+    const { ipfsHash } = req.body;
+    console.log(patientAddress);
+    const options = {
+        from: patientAddress,
+        gas: 3000000,
+        gasPrice: '20000000000'
+    };
+    const result = await medicalRecordsManagementContract.methods.recordApprove(patientAddress, ipfsHash).send(options);
+    console.log(result);
+    res.json({ message: "Success", result });
+})
 
 app.listen(port, () => {
     console.log('Server listening on port 5000');

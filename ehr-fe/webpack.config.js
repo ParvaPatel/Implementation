@@ -1,5 +1,3 @@
-const path = require('path');
-
 module.exports = {
   // ...
   resolve: {
@@ -7,6 +5,7 @@ module.exports = {
       crypto: require.resolve('crypto-browserify'),
       path: require.resolve('path-browserify'),
       stream: require.resolve('stream-browserify'),
+      Buffer: require.resolve('buffer'),
     },
   },
 };

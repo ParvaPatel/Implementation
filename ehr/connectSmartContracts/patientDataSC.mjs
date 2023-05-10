@@ -18,6 +18,6 @@ import Web3 from "web3";
 
 const web3 = new Web3("http://localhost:8545");
 const abi = PatientRegistry.abi; // ABI of your contract
-const address = "0x42Fbb762EAeb3d326D9452aFC3D752E268aF0e4f" // address of your contract on the network
+const address = "0xa971755331f3a434E3202Da730113Cc0CA9fc31a" // address of your contract on the network
 export const patientRegistryContract= new web3.eth.Contract(abi, address);
 

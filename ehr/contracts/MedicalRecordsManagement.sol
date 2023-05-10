@@ -7,6 +7,8 @@ contract MedicalRecordsManagement {
     struct ipfsRecord{
         string[] ipfsHashes;
         address[] doctorAccessList;
+        string[] ipnsRecords;
+        string[] pendingIpfs;
     }
     struct doctor{
         string username;
@@ -47,8 +49,8 @@ contract MedicalRecordsManagement {
         doctorList.push(toGetDoctorList(_username,_name,_licenseId,_specialization,msg.sender));
 
     }
-    function getPatient(address add) view public returns (string[] memory, address[] memory ) {
-        return (patientRecords[add].ipfsHashes,patientRecords[add].doctorAccessList);
+    function getPatient(address add) view public returns (string[] memory, address[] memory ,string[] memory,string[] memory) {
+        return (patientRecords[add].ipfsHashes,patientRecords[add].doctorAccessList,patientRecords[add].ipnsRecords,patientRecords[add].pendingIpfs);
     }
     function getDoctor(address add) view public returns (string memory, string memory, string memory, string memory, address[] memory){
         return (doctorRecords[add].username, doctorRecords[add].name,doctorRecords[add].licenseId,doctorRecords[add].specialization,doctorRecords[add].patientAccessList);
@@ -124,9 +126,31 @@ contract MedicalRecordsManagement {
     }
     function addPatientDataForDoctor(address patientAdd, string memory data) public{
         require(checkAccess(patientAdd,msg.sender),"You do not have access");
-        patientRecords[patientAdd].ipfsHashes.push(data);
+        patientRecords[patientAdd].pendingIpfs.push(data);
     }
     function getPatientDataForPatient() public view returns (string[] memory){
         return (patientRecords[msg.sender].ipfsHashes);
+    }
+    function getPendingIpfs() public view returns (string[] memory){
+        return (patientRecords[msg.sender].pendingIpfs);
+    }
+    function recordApprove(address patientAdd, string memory ipfs) public {
+
+        uint256 index;
+        uint256 pendingRecordCount = patientRecords[patientAdd].pendingIpfs.length;
+        for (uint256 i = 0; i < pendingRecordCount; i++) {
+            if (compare(patientRecords[patientAdd].pendingIpfs[i],ipfs)) {
+                index = i;
+                break;
+            }
+        }
+        if (index < pendingRecordCount) {
+            patientRecords[patientAdd].pendingIpfs[index] = patientRecords[patientAdd].pendingIpfs[pendingRecordCount - 1];
+            patientRecords[patientAdd].pendingIpfs.pop();
+            patientRecords[patientAdd].ipfsHashes.push(ipfs);
+        }
+    } 
+  function compare(string memory str1, string memory str2) public pure returns (bool) {
+        return keccak256(abi.encodePacked(str1)) == keccak256(abi.encodePacked(str2));
     }
 }

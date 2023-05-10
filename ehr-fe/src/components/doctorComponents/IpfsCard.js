@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import getFileFromIpfs from '../../utils/getFileFromIpfs';
 import { Document, Page, pdfjs } from 'react-pdf';
+import CodeModal from '../CodeModal';
+
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 
@@ -14,10 +16,12 @@ const IpfsCard = (props) => {
     const [url, setUrl] = useState(null);
     const [isVisible, setIsVisible] = useState(false);
     const [pageNumber, setPageNumber] = useState(1);
+    const [code, setCode] = useState("");
+    const [modalOpen, setModalOpen] = useState(false);
 
 
-    const fetchData = async () => {
-        const response = await getFileFromIpfs({ipfsHash,ipfs});
+    const fetchData = async (code) => {
+        const response = await getFileFromIpfs({ipfsHash,ipfs,code});
         setData(response);
         const url = URL.createObjectURL(response);
         setUrl(url);
@@ -41,18 +45,36 @@ const IpfsCard = (props) => {
     //     fetchData();
     // }, []);
 
+    const openModal = () => {
+        setData(null);
+        setUrl(null);
+        if(!isVisible){
+            setModalOpen(true);
+        }
+        else{
+            setIsVisible(!isVisible);
+        }
+    };
+    
+    const closeModal =async () => {
+        Promise.all(fetchData(code));
+        setIsVisible(!isVisible);
+        setModalOpen(false);
+    };
+
 
 
 
     // const num = props.num
     return (
         <>
-            <tr onClick={toggleVisibility}>
-                <th>{num}</th>
-                <th>{ipfsHash}</th>
-
+            <tr onClick={openModal}>
+                <th>File - {num}</th>
+                {/* <th>{ipfsHash}</th> */}
             </tr>
+           <CodeModal code={code} modalOpen={modalOpen} closeModal={closeModal} setCode={setCode}/>
             {isVisible ?
+                
                 <tr>
                     <th colSpan={2}>
                         <Document file={url} onLoadSuccess={onDocumentLoadSuccess} renderMode={"canvas"}>

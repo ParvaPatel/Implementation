@@ -21,6 +21,7 @@ const AddPatientData = ({ipfs}) => {
         const cid = await addFileToIpfs({file,ipfs});
         console.log(cid);
  
+
         fetch(backendURL + "/addPatientDataForDoctor/", {
             method: 'POST',
             cache: 'no-cache',
@@ -100,7 +101,7 @@ const AddPatientData = ({ipfs}) => {
                 <thead className="table-primary px-5">
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">IPFS Hashes</th>
+                        <th scope="col">Patient Data</th>
                     </tr>
                 </thead>
                 <tbody>

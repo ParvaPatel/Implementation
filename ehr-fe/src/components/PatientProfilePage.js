@@ -9,7 +9,7 @@ import { Container, Navbar, Nav, Dropdown } from 'react-bootstrap';
 import NavbarPatient from './NavbarPatient'
 import IpfsCard from './doctorComponents/IpfsCard';
 
-const PatientProfilePage = ({ipfs}) => {
+const PatientProfilePage = ({ ipfs }) => {
   var num = 1;
   var backendURL = 'http://localhost:5000';
   const [type, setType] = useState("");
@@ -18,18 +18,20 @@ const PatientProfilePage = ({ipfs}) => {
   const [privateAddress, setPrivateAddress] = useState("");
   const [password, setPassword] = useState("");
   const [ipfsHashes, setIpfsHashes] = useState([]);
+  const [pendingIpfsHashes, setPendingIpfsHashes] = useState([]);
   const [doctorAccessList, setDoctorAccessList] = useState([]);
 
 
   useEffect(() => {
 
-    const type = localStorage.getItem('type')||"";
-    const username = localStorage.getItem('username')||"";
-    const publicAddress = localStorage.getItem('publicAddress')||"";
-    const privateAddress = localStorage.getItem('privateAddress')||"";
-    const password = localStorage.getItem('password')||"";
-    const ipfsHashes = JSON.parse(localStorage.getItem('ipfsHashes'))||[];
-    const doctorAccessList = JSON.parse(localStorage.getItem('doctorAccessList'))||[];
+    const type = localStorage.getItem('type') || "";
+    const username = localStorage.getItem('username') || "";
+    const publicAddress = localStorage.getItem('publicAddress') || "";
+    const privateAddress = localStorage.getItem('privateAddress') || "";
+    const password = localStorage.getItem('password') || "";
+    const ipfsHashes = JSON.parse(localStorage.getItem('ipfsHashes')) || [];
+    const pendingIpfsHashes = JSON.parse(localStorage.getItem('pendingIpfsHashes')) || [];
+    const doctorAccessList = JSON.parse(localStorage.getItem('doctorAccessList')) || [];
 
 
     setUsername(username);
@@ -38,6 +40,7 @@ const PatientProfilePage = ({ipfs}) => {
     setPassword(password);
     setType(type);
     setIpfsHashes(ipfsHashes);
+    setPendingIpfsHashes(pendingIpfsHashes);
     setDoctorAccessList(doctorAccessList);
 
     if (type !== "patient") {
@@ -54,11 +57,33 @@ const PatientProfilePage = ({ipfs}) => {
     }).then(response => response.json()).
       then(data => {
         console.log(data);
-        setIpfsHashes(data);
-        localStorage.setItem('ipfsHashes', JSON.stringify(data));
+        setIpfsHashes(data.result);
+        setPendingIpfsHashes(data.pendingResult);
+        localStorage.setItem('ipfsHashes', JSON.stringify(data.result));
+        localStorage.setItem('pendingIpfsHashes', JSON.stringify(data.pendingResult));
       });
   }, []
   );
+
+  const approveFile = (ipfsHash) => {
+    fetch(backendURL + "/recordApprove/" + publicAddress, {
+      method: 'POST',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify({
+        'ipfsHash': ipfsHash
+      })
+    }).then((response) => response.json()).
+      then((data) => {
+        // getIpfsHashes();
+        console.log("Approved");
+        window.location.reload();
+      });
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -74,10 +99,22 @@ const PatientProfilePage = ({ipfs}) => {
     navigate(path);
   }
 
+  // const openModal = () => {
+  //   setModalOpen(true);
+
+  // };
+  // const closeModal = async (ipfsHash) => {
+  //   Promise.all(approveFile(ipfsHash));
+  //   console.log(code);
+  //   // Decrypt Data
+  //   setIsVisible(!isVisible);
+  //   setModalOpen(false);
+  // };
+
   return (
 
     <div>
-                  <NavbarPatient username={username}/>
+      <NavbarPatient username={username} />
 
 
       <h2>
@@ -113,25 +150,49 @@ const PatientProfilePage = ({ipfs}) => {
                 <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">Fugiat ipsum ipsum deserunt culpa aute sint do nostrud anim incididunt cillum culpa consequat. Excepteur qui ipsum aliquip consequat sint. Sit id mollit nulla mollit nostrud in ea officia proident. Irure nostrud pariatur mollit ad adipisicing reprehenderit deserunt qui eu.</dd>
               </div>
               <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">Attachments</dt>
+                <dt className="text-sm font-medium text-gray-500">Records</dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                   <ul role="list" className="divide-y divide-gray-200 rounded-md border border-gray-200">
 
                     {ipfsHashes && ipfsHashes.map((ipfsHash, index) => (
                       <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
                         <div className="flex w-0 flex-1 items-center">
-                            {/* <svg className="h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"> */}
-                            {/* <path fill-rule="evenodd" d="M15.621 4.379a3 3 0 00-4.242 0l-7 7a3 3 0 004.241 4.243h.001l.497-.5a.75.75 0 011.064 1.057l-.498.501-.002.002a4.5 4.5 0 01-6.364-6.364l7-7a4.5 4.5 0 016.368 6.36l-3.455 3.553A2.625 2.625 0 119.52 9.52l3.45-3.451a.75.75 0 111.061 1.06l-3.45 3.451a1.125 1.125 0 001.587 1.595l3.454-3.553a3 3 0 000-4.242z" clip-rule="evenodd" />
+                          {/* <svg className="h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"> */}
+                          {/* <path fill-rule="evenodd" d="M15.621 4.379a3 3 0 00-4.242 0l-7 7a3 3 0 004.241 4.243h.001l.497-.5a.75.75 0 011.064 1.057l-.498.501-.002.002a4.5 4.5 0 01-6.364-6.364l7-7a4.5 4.5 0 016.368 6.36l-3.455 3.553A2.625 2.625 0 119.52 9.52l3.45-3.451a.75.75 0 111.061 1.06l-3.45 3.451a1.125 1.125 0 001.587 1.595l3.454-3.553a3 3 0 000-4.242z" clip-rule="evenodd" />
                             </svg> */}
-                            <span className="ms-2 w-0 flex-1 truncate" >                
-                                    <IpfsCard ipfsHash={ipfsHash} ipfs={ipfs} style={{cursor:"pointer"}} key={index} num={num++} />
-                            </span>
+                          <span className="ms-2 w-0 flex-1 truncate" >
+                            <IpfsCard ipfsHash={ipfsHash} ipfs={ipfs} style={{ cursor: "pointer" }} key={index} num={num++} />
+                          </span>
                         </div>
                         {/* <div className="ms-4 flex-shrink-0">
                           <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">Download</a>
                         </div> */}
                       </li>
-                      ))}
+                    ))}
+                  </ul>
+                </dd>
+              </div>
+              <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt className="text-sm font-medium text-gray-500">Pending Records</dt>
+                <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                  <ul role="list" className="divide-y divide-gray-200 rounded-md border border-gray-200">
+
+                    {pendingIpfsHashes && pendingIpfsHashes.map((ipfsHash, index) => (
+                      <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
+                        <div className="flex w-0 flex-1 items-center">
+                          {/* <svg className="h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"> */}
+                          {/* <path fill-rule="evenodd" d="M15.621 4.379a3 3 0 00-4.242 0l-7 7a3 3 0 004.241 4.243h.001l.497-.5a.75.75 0 011.064 1.057l-.498.501-.002.002a4.5 4.5 0 01-6.364-6.364l7-7a4.5 4.5 0 016.368 6.36l-3.455 3.553A2.625 2.625 0 119.52 9.52l3.45-3.451a.75.75 0 111.061 1.06l-3.45 3.451a1.125 1.125 0 001.587 1.595l3.454-3.553a3 3 0 000-4.242z" clip-rule="evenodd" />
+                            </svg> */}
+                          <span className="ms-2 w-0 flex-1 truncate" >
+                            <IpfsCard ipfsHash={ipfsHash} ipfs={ipfs} style={{ cursor: "pointer" }} key={index} num={num++} />
+                          </span>
+                          <button onClick={() => approveFile(ipfsHash)}>Approve</button>
+                        </div>
+                        {/* <div className="ms-4 flex-shrink-0">
+                          <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">Download</a>
+                        </div> */}
+                      </li>
+                    ))}
                   </ul>
                 </dd>
               </div>

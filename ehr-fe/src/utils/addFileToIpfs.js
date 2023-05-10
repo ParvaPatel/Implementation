@@ -1,14 +1,14 @@
 import { Buffer } from 'buffer';
-
+import encryptData from './encryptData';
 
 const addFileToIpfs = async ({file,ipfs}) => {
 
 
     const buffer = Buffer.from(await file.arrayBuffer());
-    const { cid } = await ipfs.add(buffer);
+    const encryptedData = await encryptData({buffer});
+    // console.log(encryptedData);
+    const { cid } = await ipfs.add(encryptedData);
+    // return "Success";
     return cid.toString();
-    // console.log(file.data);
-    // const cid = await ipfs.add(file);
-    // return cid;
 }
 export default addFileToIpfs;
